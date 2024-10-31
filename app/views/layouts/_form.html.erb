@@ -1,0 +1,105 @@
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+
+<% if action == 'new' %>
+  <% verb = 'Create' %>
+<% elsif action == 'edit' %>
+  <% verb = 'Update' %>
+<% end -%>
+
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-body">
+      <h2 class="text-center mb-4"><%= verb %> Agreement</h2>
+
+      <%= simple_form_for instant_var, html: { class: 'needs-validation' } do |f| %>
+        <% form_column_names.each do |fcn| %>
+        	<% next if fcn.include? 'signature' %>
+          <% if fcn.include? '_id' %>
+            <div class="mb-4">
+              <label class="form-label"><%= sanitize fcn.titleize %>:</label>
+              <%= f.select fcn.to_sym, form_collection(fcn), {}, class: 'form-select form-select-lg' %>
+            </div>
+
+          <% elsif fcn.include? 'description' %>
+            <div class="mb-4">
+              <label class="form-label"><%= sanitize fcn.titleize %>:</label>
+              <%= f.text_area fcn.to_sym, rows: 4, class: 'form-control' %>
+            </div>
+
+          <% elsif fcn.include? 'date' %>
+            <div class="mb-4">
+              <label class="form-label"><%= sanitize fcn.titleize %>:</label>
+              <%= f.date_select fcn.to_sym, { include_blank: true, default: nil }, class: 'form-control' %>
+            </div>
+
+
+          <% elsif fcn.include?('has_') || fcn.include?('is_') %>
+            <div class="form-check mb-3">
+              <%= f.check_box fcn.to_sym, class: 'form-check-input' %>
+              <label class="form-check-label"><%= sanitize fcn.titleize %></label>
+            </div>
+
+          <% elsif fcn == 'state' %>
+            <!-- State dropdown with U.S. states -->
+            <div class="mb-4">
+              <label class="form-label">State:</label>
+              <%= f.select :state, us_states, { include_blank: 'Select a State' }, class: 'form-select' %>
+            </div>
+
+          <% else %>
+            <div class="mb-4">
+              <%= f.input fcn.to_sym, label: fcn.titleize, input_html: { class: 'form-control' } %>
+            </div>
+          <% end -%>
+
+        <% end %>
+
+        <hr>
+
+        <div class="d-flex justify-content-between">
+				  <%= link_to 'Back', root_path, class:'btn btn-outline-danger' %>
+          <%= f.submit verb, class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Custom CSS for Styling -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+  
+  .card {
+    border-radius: 12px;
+  }
+  
+  .form-control, .form-select {
+    border-radius: 8px;
+  }
+  
+  .form-label {
+    font-weight: 600;
+  }
+  
+  #signature-pad {
+    max-width: 100%;
+  }
+  
+  button {
+    border-radius: 8px;
+  }
+
+  .form-check-input {
+    margin-right: 8px;
+    transform: scale(1.2);
+  }
+  
+  .form-check-label {
+    font-weight: 500;
+  }
+</style>
+
+

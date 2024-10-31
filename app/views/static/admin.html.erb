@@ -1,0 +1,32 @@
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-body text-center">
+      <h2 class="card-title mb-4">Admin Dashboard</h2>
+      
+      <p class="lead">Welcome to the admin dashboard. Please select an action below:</p>
+
+      <div class="d-grid gap-3 mt-4">
+        <%= link_to 'Membership Page', root_path, class: 'btn btn-primary btn-lg' %>
+        <%= link_to 'Show All Classes', afns_classes_path, class: 'btn btn-secondary btn-lg' %>
+        <%= link_to 'Show All Guest Waivers', guest_agreements_path, class: 'btn btn-info btn-lg' %>
+        <%= link_to 'Show All Waivers', waivers_path, class: 'btn btn-warning btn-lg' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Additional Styling -->
+<style>
+  .card {
+    border-radius: 12px;
+  }
+
+  .card-title {
+    font-weight: 700;
+    color: #333;
+  }
+
+  .d-grid .btn {
+    width: 100%;
+  }
+</style>

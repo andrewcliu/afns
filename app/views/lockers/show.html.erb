@@ -1,0 +1,10 @@
+<h1>Locker Details</h1>
+<p><strong>Locker Number:</strong> <%= @locker.locker_number %></p>
+<p><strong>First Name:</strong> <%= @locker.first_name %></p>
+<p><strong>Key Tag Number:</strong> <%= @locker.key_tag_number %></p>
+<p><strong>Receipt Number:</strong> <%= @locker.receipt_number %></p>
+<p><strong>Expiration Date:</strong> <%= @locker.expiration_date %></p>
+<p><strong>Staff Name:</strong> <%= @locker.staff_name %></p>
+
+<%= link_to 'Edit Locker', edit_locker_path(@locker), class: 'btn btn-warning' %>
+<%= link_to 'Back to Lockers', lockers_path, class: 'btn btn-secondary' %>

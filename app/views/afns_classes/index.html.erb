@@ -1,0 +1,132 @@
+<div class="container my-4">
+  <!-- Header Section with Buttons -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <%= link_to 'Add New Classes', new_afns_class_path, class: "btn btn-primary d-print-none" %>
+    <%= link_to 'Back to Dashboard', admin_path, class: "btn btn-outline-secondary d-print-none" %>
+    <button onclick="printCalendar()" class="btn btn-secondary d-print-none">Print Calendar</button>
+  </div>
+
+  <!-- Class Table -->
+  <div class="table-responsive mb-5 d-print-none">
+    <table class="table table-bordered table-hover table-sm">
+      <thead class="table-light">
+        <tr>
+          <th>Class Name</th>
+          <th>Instructor</th>
+          <th>Room</th>
+          <th>Active?</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% AfnsClass.all.each do |f| %>
+          <tr>
+            <td><%= f.name %></td>
+            <td><%= f.instructor %></td>
+            <td><%= f.room %></td>
+            <td>
+              <% if f.is_active %>
+                <span class="badge bg-success">Active</span>
+              <% else %>
+                <span class="badge bg-danger">Inactive</span>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to 'Delete', afns_class_path(f.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-sm me-2" %>
+              <%= link_to 'Manage Schedule', new_afns_class_schedule_path(afns_class_id: f.id), class: "btn btn-info btn-sm me-2" %>
+              <% if f.schedules.present? %>
+                <%= link_to 'Edit', edit_afns_class_path(f.id), class: "btn btn-warning btn-sm me-2" %>
+                <%= link_to 'Show Schedule', afns_class_path(f.id), class: "btn btn-secondary btn-sm" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Weekly Calendar View -->
+<% today = Date.today %>
+<% start_of_week = today.beginning_of_week %>
+<% end_of_week = today.end_of_week %>
+
+<div id="calendar-section" style="width:100%;">
+  <h3 class="text-center">Weekly Class Schedule</h3>
+  <p class="text-center text-muted">
+    <strong>Week of <%= start_of_week.strftime("%B %d, %Y") %> - <%= end_of_week.strftime("%B %d, %Y") %></strong>
+  </p>
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Time</th>
+        <% AfnsClassSchedule::DAYS_OF_WEEK.keys.each do |day| %>
+          <th><%= day.capitalize %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% time_slots = (7..24).to_a %> <!-- Defines time slots from 7 AM to 9 PM -->
+      <% time_slots.each do |hour| %>
+        <tr>
+          <td><%= Time.parse("#{hour}:00").strftime("%I:%M %p") %></td>
+          <% AfnsClassSchedule::DAYS_OF_WEEK.keys.each do |day| %>
+            <td>
+              <% AfnsClassSchedule.includes(:afns_class).where(day_of_week: day, afns_classes: { is_active: true }).each do |schedule| %>
+                <% start_time_in_minutes = schedule.start_time.hour * 60 + schedule.start_time.min %>
+                <% end_time_in_minutes = schedule.end_time.hour * 60 + schedule.end_time.min %>
+                <% current_hour_start = hour * 60 %>
+                <% current_hour_end = (hour + 1) * 60 %>
+
+                <% if start_time_in_minutes < current_hour_end && end_time_in_minutes > current_hour_start %>
+                  <div class="bg-light p-2 rounded mb-1">
+                    <strong><%= schedule.afns_class.name %></strong><br>
+                    <small><%= schedule.start_time.strftime("%I:%M %p") %> - <%= schedule.end_time.strftime("%I:%M %p") %></small><br>
+                    <em><%= schedule.afns_class.instructor %></em><br>
+                    <em><%= schedule.afns_class.room %></em><br>
+                    <em># of ppl __________</em>
+                  </div>
+                <% end %>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!-- JavaScript for printing only the calendar -->
+<script>
+  function printCalendar() {
+    // Hide everything except the calendar section for printing
+    document.querySelectorAll('.container, .d-print-none').forEach(el => el.style.display = 'none');
+    document.getElementById('calendar-section').style.display = 'block';
+    
+    window.print();
+
+    // Restore visibility after printing
+    document.querySelectorAll('.container, .d-print-none').forEach(el => el.style.display = '');
+  }
+</script>
+
+<!-- Print-Specific Styles -->
+<style>
+  @media print {
+    .d-print-none {
+      display: none !important;
+    }
+    #calendar-section {
+      width: 100% !important;
+      border: 1px solid #000;
+    }
+    .table thead th {
+      background-color: #f8f9fa !important;
+      -webkit-print-color-adjust: exact;
+    }
+    .table td, .table th {
+      font-size: 14px;
+      padding: 8px;
+    }
+  }
+</style>

@@ -1,0 +1,47 @@
+<% if @locker %>
+  <h1>Edit <%= @locker.gender.capitalize %> Locker</h1>
+<% else %>
+  <h1>Locker not found</h1>
+<% end %>
+<%= form_with model: @locker, local: true do |f| %>
+  <div class="mb-3">
+    <%= f.label :locker_number, "Locker Room" %>
+    <%= f.select :locker_number, 
+          options_for_select(@locker.gender == 'male' ? male_locker_number : female_locker_number, @locker.locker_number), 
+          {}, 
+          class: "form-select" %>
+  </div>
+  <div class="mb-3">
+    <%= f.label :first_name %>
+    <%= f.text_field :first_name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :key_tag_number %>
+    <%= f.text_field :key_tag_number, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :receipt_number %>
+    <%= f.text_field :receipt_number, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :expiration_date %>
+    <%= f.date_field :expiration_date, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :staff_name %>
+    <%= f.text_field :staff_name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :gender %>
+    <%= f.text_field :gender, value: @locker.gender.capitalize, class: "form-control", readonly: true %>
+  </div>
+
+  <%= f.submit "Update Locker", class: "btn btn-primary" %>
+<% end %>
+
+<%= link_to 'Back to Lockers', lockers_path, class: 'btn btn-secondary mt-3' %>

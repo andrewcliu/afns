@@ -1,0 +1,32 @@
+<%= form_with model: @afns_class_schedule, local: true do |f| %>
+  <!-- Select Class -->
+  <div class="mb-3">
+    <%= f.label :afns_class_id, "Select Class", class: "form-label" %>
+    <%= f.collection_select :afns_class_id, @afns_classes, :id, :name, { prompt: "Choose a class" }, class: "form-select" %>
+  </div>
+
+  <!-- Repeat Days Checkboxes -->
+  <div class="mb-3">
+    <%= f.label :repeat_days, "Repeat on Other Days", class: "form-label" %><br>
+    <% AfnsClassSchedule::DAYS_OF_WEEK.keys.each do |day| %>
+      <% next if day == @afns_class_schedule.day_of_week %> <!-- Skip current day -->
+      <div class="form-check form-check-inline">
+        <%= check_box_tag 'afns_class_schedule[repeat_days][]', day, false, class: "form-check-input" %>
+        <%= label_tag "afns_class_schedule_repeat_days_#{day}", day.capitalize, class: "form-check-label" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Start Time and End Time -->
+<div class="col-md-6">
+  <%= f.label :start_time, "Start Time", class: "form-label" %>
+  <%= f.time_select :start_time, { minute_step: 15, ampm: true }, class: "form-control" %>
+</div>
+<div class="col-md-6">
+  <%= f.label :end_time, "End Time", class: "form-label" %>
+  <%= f.time_select :end_time, { minute_step: 15, ampm: true }, class: "form-control" %>
+</div>
+
+
+  <%= f.submit "Create Schedule", class: "btn btn-primary" %>
+<% end %>

@@ -1,0 +1,11 @@
+<div class="text-center">
+		<%= link_to admin_path do %>
+		  <%= image_tag 'logo.png', style: 'width:25%;' %>
+		<% end %>
+
+</div>
+
+<% unless params[:controller] == 'waivers' and params[:action] == 'new' %>
+<h3 class='text-center'>Add <%= action.titleize %> <%= page_name.singularize %> Field</h3>
+<% end -%>
+<%= render 'layouts/form' %>

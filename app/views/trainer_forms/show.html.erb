@@ -1,0 +1,72 @@
+<div class="container mt-5" style="width: 8.5in; padding: 1in; border: 1px solid #ccc;">
+  <h1 class="text-center mb-4" style="font-family: 'Times New Roman', Times, serif; font-size: 24px;">Trainer Form Request</h1>
+  
+  <p style="font-size: 18px; font-family: 'Times New Roman', Times, serif;">
+    <strong>Member Name:</strong> <%= @trainer_form.name %>
+  </p>
+  <p style="font-size: 18px; font-family: 'Times New Roman', Times, serif;">
+    <strong>Date Created:</strong> <%= @trainer_form.created_at.strftime('%m/%d/%y') %>
+  </p>
+  <p style="font-size: 18px; font-family: 'Times New Roman', Times, serif;">
+    <strong>Membership or Keytag #:</strong> <%= @trainer_form.membership_number %>
+  </p>
+
+  <p style="font-size: 18px; font-family: 'Times New Roman', Times, serif;">
+    <strong>Date of Birth:</strong> <%= @trainer_form.date_of_birth.strftime('%m/%d/%y') %>
+  </p>
+  
+  <p style="font-size: 18px; font-family: 'Times New Roman', Times, serif;">
+    <strong>Contact Phone #:</strong> <%= @trainer_form.phone %>
+  </p>
+
+
+  <p style="font-size: 18px; font-family: 'Times New Roman', Times, serif;"><strong>
+  	    I am interested in working with a personal trainer for the following reasons: (select all that apply)</strong>
+  </p>
+  <ul style="font-size: 16px; font-family: 'Times New Roman', Times, serif; margin-left: 20px;">
+    <% @trainer_form.reasons.split(';').each do |reason| %>
+      <li><%= reason.strip %></li>
+    <% end %>
+  </ul>
+
+  <p style="font-size: 18px; font-family: 'Times New Roman', Times, serif;">
+    <strong>Do you have any medical conditions your trainer should be aware of?</strong> 
+    <br><%= @trainer_form.medical_conditions.presence || "None" %>
+  </p>
+  
+  <p style="font-size: 18px; font-family: 'Times New Roman', Times, serif;">
+    <strong>Additional notes or requests for your trainer:</strong> <br><%= @trainer_form.additional_notes.presence || "None" %>
+  </p>
+
+  <hr style="margin: 2em 0; border-top: 1px solid #333;">
+  <p class='text-center'>
+  	*A trainer will contact you within 72 hours with pricing and options. <br>
+  	<a href="www.alamedafns.com">www.alamedafns.com</a>
+  </p>
+  <div class="text-center mt-4">
+    <%= link_to 'Back to Trainer Forms', trainer_forms_path, class: 'btn btn-outline-secondary' %>
+    <%= link_to 'Edit', edit_trainer_form_path(@trainer_form), class: 'btn btn-warning mx-2' %>
+    <%= link_to 'Delete', trainer_form_path(@trainer_form), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+  </div>
+</div>
+
+<style>
+  /* Print Styling */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    .container,
+    .container * {
+      visibility: visible;
+    }
+    .container {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .btn, hr, .text-center {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,68 @@
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Waiver Details</h1>
+
+  <div class="card shadow-lg p-4">
+    <div class="card-body">
+      <h4 class="card-title"><%= @waiver.first_name %> <%= @waiver.last_name %></h4>
+
+      <table class="table table-bordered mt-3">
+        <tbody>
+          <tr>
+            <th>First Name</th>
+            <td><%= @waiver.first_name %></td>
+          </tr>
+          <tr>
+            <th>Last Name</th>
+            <td><%= @waiver.last_name %></td>
+          </tr>
+          <tr>
+            <th>Phone</th>
+            <td><%= @waiver.phone %></td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td><%= @waiver.email %></td>
+          </tr>
+          <tr>
+            <th>Class ID</th>
+            <td><%= @waiver.afns_class_id %></td>
+          </tr>
+          <tr>
+            <th>Created At</th>
+            <td><%= @waiver.created_at.strftime("%B %d, %Y at %I:%M %p") %></td>
+          </tr>
+
+          <!-- Signature Row -->
+          <% if @waiver.signature.present? %>
+            <tr>
+              <th>Signature</th>
+              <td>
+                <% if @waiver.signature.attached? %>
+                  <%= image_tag @waiver.signature, style: "max-width: 100%; height: auto;" %>
+                <% else %>
+                  <%= image_tag @waiver.signature, style: "max-width: 100%; height: auto;" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between mt-4">
+        <%= link_to 'Back to Waivers', waivers_path, class: 'btn btn-outline-secondary' %>
+        <%= link_to 'Edit Waiver', edit_waiver_path(@waiver), class: 'btn btn-primary' %>
+        <%= link_to 'Delete Waiver', waiver_path(@waiver), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    border-radius: 12px;
+  }
+
+  .table th, .table td {
+    vertical-align: middle;
+  }
+</style>

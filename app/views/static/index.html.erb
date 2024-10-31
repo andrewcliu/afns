@@ -1,0 +1,46 @@
+<br>
+<div class="row">
+	<div class='col-sm-12 col-md-8 offset-md-2 text-center'>
+
+		<%= link_to admin_path do %>
+		  <%= image_tag 'logo.png', style: 'width:35%;' %>
+		<% end %>
+
+		<br><br><br>
+		<h1>Welcome</h1>
+		<p>
+			Please select options below to sign waiver before access to our facility.
+		</p>
+	</div>
+</div>
+<div class="row">
+	<div class='col-md-3 offset-1' id='guestbg'>
+		<h2>Guest Waiver</h2>
+	</div>
+	<div class="col-md-3" id='classbg' style='margin-left:1rem;'>
+		<h2>Class Waivers</h2>
+	</div>
+	<div class="col-md-3" id='trainerbg' style='margin-left:1rem;'>
+		<h2>Personal Trainer <br> Request Form</h2>
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  // Navigate to different pages
+  $('#classbg').click(function() {
+    window.location.href = '/waivers/new';
+  });
+
+  $('#guestbg').click(function() {
+    window.location.href = '/guest_agreements/new';
+  });
+  $('#trainerbg').click(function() {
+    window.location.href = '/trainer_forms/new';
+  });
+
+});
+</script>
+
+

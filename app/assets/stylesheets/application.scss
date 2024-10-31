@@ -1,0 +1,59 @@
+@import "bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.container{
+	padding:35px!important;
+}
+*{
+  font-family: "Roboto", sans-serif;
+}
+#guestbg{
+	background-image: asset_url('gym_guest.jpeg');
+	background-size: cover;
+	background-position: center;
+	height:35vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	border-radius:5px;
+  transition: transform 0.5s ease; 
+}
+
+#classbg{
+	background-image: asset_url('gym_class.jpeg');
+	background-size: cover;
+	background-position: center;
+	height:35vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	border-radius:5px;
+  transition: transform 0.5s ease; 
+}
+
+#trainerbg{
+	background-image: asset_url('trainer.jpeg');
+	background-size: cover;
+	background-position: center;
+	height:35vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	border-radius:5px;
+  transition: transform 0.5s ease; 
+}
+
+
+#classbg:hover, #guestbg:hover, #trainerbg:hover {
+/*	transform: scale(0.9);*/
+	box-shadow: 1px 5px 2px #888;
+}
+
+#classbg h2, #guestbg h2, #trainerbg h2{
+	background-color:white;
+	padding:5px;
+	border-radius: 5px;
+}

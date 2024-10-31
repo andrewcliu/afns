@@ -1,0 +1,2 @@
+module AfnsClassesHelper
+end

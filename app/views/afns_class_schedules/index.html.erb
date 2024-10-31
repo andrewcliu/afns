@@ -1,0 +1,73 @@
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+<style>
+  /* Ensure each event has enough vertical space */
+  .fc-event {
+    min-height: 50px; /* Adjust to your preference */
+    padding: 5px; /* Add padding for readability */
+    white-space: normal; /* Allow text to wrap to multiple lines */
+  }
+
+  /* Increase row height in day and week views */
+  .fc-dayGridMonth-view .fc-dayGrid-event {
+    min-height: 60px; /* For month view */
+  }
+  
+  .fc-timeGridWeek-view .fc-timeGrid-event,
+  .fc-timeGridDay-view .fc-timeGrid-event {
+    min-height: 60px; /* For week and day views */
+  }
+</style>
+<h1 class="text-center my-4">Class Schedule Calendar</h1>
+
+  <div id="calendar"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const calendarEl = document.getElementById('calendar');
+
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'timeGridWeek', // Use week view by default
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    events: <%= raw @events.to_json %>, // Load events from the controller
+
+    eventTimeFormat: { // Format for displaying time
+      hour: 'numeric',
+      minute: '2-digit',
+      meridiem: 'short'
+    },
+
+    eventContent: function(info) { // Customize the content of each event
+      const title = document.createElement('div');
+      title.classList.add('fc-event-title');
+      title.innerText = info.event.title;
+
+      const time = document.createElement('div');
+      time.classList.add('fc-event-time');
+      time.innerText = `${info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${info.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+
+      const description = document.createElement('div');
+      description.classList.add('fc-event-description');
+      description.innerText = info.event.extendedProps.description;
+
+      const content = document.createElement('div');
+      content.appendChild(title);
+      content.appendChild(time);
+      content.appendChild(description);
+      return { domNodes: [content] };
+    }
+  });
+
+  calendar.render();
+});
+
+</script>

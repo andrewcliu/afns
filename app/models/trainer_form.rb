@@ -1,0 +1,2 @@
+class TrainerForm < ApplicationRecord
+end

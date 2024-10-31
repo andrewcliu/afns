@@ -1,0 +1,30 @@
+<h1>Trainer Forms</h1>
+
+<%= link_to 'New Trainer Form', new_trainer_form_path, class: 'btn btn-primary mb-3' %>
+
+<table class="table table-bordered">
+  <thead class="table-light">
+    <tr>
+      <th>Name</th>
+      <th>Membership Number</th>
+      <th>Date of Birth</th>
+      <th>Phone</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @trainer_forms.each do |form| %>
+      <tr>
+        <td><%= form.name %></td>
+        <td><%= form.membership_number %></td>
+        <td><%= form.date_of_birth %></td>
+        <td><%= form.phone %></td>
+        <td>
+          <%= link_to 'Show', trainer_form_path(form), class: 'btn btn-secondary btn-sm' %>
+          <%= link_to 'Edit', edit_trainer_form_path(form), class: 'btn btn-warning btn-sm' %>
+          <%= link_to 'Delete', trainer_form_path(form), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

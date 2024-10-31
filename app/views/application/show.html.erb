@@ -1,0 +1,52 @@
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-body">
+      <h3 class="text-center mb-4">About <%= @guest_agreement.name %></h3>
+
+      <table class="table table-bordered">
+        <tbody>
+          <% @guest_agreement.attributes.each do |attribute, value| %>
+            <tr>
+              <td class="fw-bold" style="width: 25%; background-color: #f8f9fa;">
+                <%= sanitize(attribute).humanize %>
+              </td>
+              <td><%= sanitize(value.to_s) %></td>
+            </tr>
+          <% end %>
+
+          <%# Display the signature image if attached %>
+          <% if @guest_agreement.signature.attached? %>
+            <tr>
+              <td class="fw-bold" style="width: 25%; background-color: #f8f9fa;">
+                Signature
+              </td>
+              <td>
+                <%= image_tag @guest_agreement.signature, style: "max-width: 100%; height: auto;" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <div class="text-center mt-4">
+        <%= link_to "Back", guest_agreements_path, class: "btn btn-outline-secondary me-2" %>
+        <%= link_to "Edit", edit_guest_agreement_path(@guest_agreement), class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Additional Styling -->
+<style>
+  .card {
+    border-radius: 10px;
+  }
+
+  .table th, .table td {
+    vertical-align: middle;
+  }
+
+  .fw-bold {
+    font-weight: 600;
+  }
+</style>
