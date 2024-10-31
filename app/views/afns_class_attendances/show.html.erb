@@ -1,0 +1,7 @@
+<!-- app/views/afns_class_attendances/show.html.erb -->
+<h1>Attendance Record for <%= @attendance.attendance_date %></h1>
+
+<p><strong>Date:</strong> <%= @attendance.attendance_date %></p>
+<p><strong>Attendance Count:</strong> <%= @attendance.attendance_count %></p>
+
+<%= link_to "Back to Attendance List", afns_class_schedule_afns_class_attendances_path(@afns_class_schedule) %>

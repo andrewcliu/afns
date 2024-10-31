@@ -1,10 +1,12 @@
 <%= form_with model: @afns_class_schedule, local: true do |f| %>
   <!-- Select Class -->
   <div class="mb-3">
-    <%= f.label :afns_class_id, "Select Class", class: "form-label" %>
-    <%= f.collection_select :afns_class_id, @afns_classes, :id, :name, { prompt: "Choose a class" }, class: "form-select" %>
-  </div>
+    <%= f.label :afns_class_id, "Selected Class", class: "form-label" %>
+    
+    <p class="form-control-plaintext"><%= @afns_class.name %></p>
 
+    <%= f.hidden_field :afns_class_id, value: @afns_class.id %>
+  </div>
   <!-- Repeat Days Checkboxes -->
   <div class="mb-3">
     <%= f.label :repeat_days, "Repeat on Other Days", class: "form-label" %><br>

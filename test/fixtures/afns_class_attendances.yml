@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  afns_class_schedule: one
+  attendance_date: 2024-10-30
+  attendance_count: 1
+
+two:
+  afns_class_schedule: two
+  attendance_date: 2024-10-30
+  attendance_count: 1

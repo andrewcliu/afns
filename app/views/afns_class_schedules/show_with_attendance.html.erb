@@ -1,0 +1,33 @@
+<!-- app/views/afns_class_schedules/show_with_attendance.html.erb -->
+
+<div class="container my-5">
+  <h1 class="mb-4">Class Schedule for <%= @afns_class_schedule.day_of_week %> Class</h1>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <p class="card-text"><strong>Class Name:</strong> <%= @afns_class_schedule.afns_class.name %></p>
+      <p class="card-text"><strong>Instructor:</strong> <%= @afns_class_schedule.afns_class.instructor %></p>
+      <p class="card-text"><strong>Time:</strong> <%= @afns_class_schedule.start_time.strftime("%I:%M %p") %> - <%= @afns_class_schedule.end_time.strftime("%I:%M %p") %></p>
+      <p class="card-text"><strong>Room:</strong> <%= @afns_class_schedule.afns_class.room %></p>
+    </div>
+  </div>
+
+  <h2 class="h5 mb-3">Record New Attendance</h2>
+
+  <%= form_with model: [@afns_class_schedule, @attendance], local: true, class: "needs-validation" do |form| %>
+    <div class="mb-3">
+      <%= form.label :attendance_date, "Date", class: "form-label" %>
+      <%= form.date_field :attendance_date, value: Date.today, class: "form-control", disabled: true  %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :attendance_count, "Attendance Count", class: "form-label" %>
+      <%= form.number_field :attendance_count, class: "form-control", min: 0 %>
+    </div>
+
+    <div class="d-flex justify-content-start mt-4">
+      <%= form.submit "Record Attendance", class: "btn btn-primary me-2" %>
+      <%= link_to "Back to Class Schedules", afns_classes_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>

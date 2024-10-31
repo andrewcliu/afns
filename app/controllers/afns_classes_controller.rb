@@ -1,5 +1,14 @@
 class AfnsClassesController < ApplicationController
   before_action :set_afns_class, only: [:show, :edit, :update, :destroy]
+  def index
+
+    today = Date.today.strftime("%A").downcase
+
+    @schedules = AfnsClassSchedule.joins(:afns_class)
+                                  .includes(:afns_class)
+                                  .where(day_of_week: today)
+                                  .where(afns_classes: { is_active: true })
+  end
   def create
     @afns_class = AfnsClass.new(afns_class_params)
 

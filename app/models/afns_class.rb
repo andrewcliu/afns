@@ -1,6 +1,7 @@
 class AfnsClass < ApplicationRecord
 	has_one :waiver
   has_many :schedules, class_name: 'AfnsClassSchedule', dependent: :destroy
+  has_many :afns_class_schedules
   accepts_nested_attributes_for :schedules, allow_destroy: true
   ROOMS = [
     { id: 1, name: 'Studio 1' },

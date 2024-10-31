@@ -1,0 +1,20 @@
+<!-- app/views/afns_class_attendances/edit.html.erb -->
+
+<div class="container my-5">
+  <h1 class="mb-4">Edit Attendance for <%= @afns_class_schedule.afns_class.name %></h1>
+
+  <%= form_with model: [@afns_class_schedule, @attendance], local: true do |form| %>
+    <div class="mb-3">
+      <%= form.label :attendance_date, "Date" %>
+      <%= form.date_field :attendance_date, class: "form-control", value: @attendance.attendance_date, disabled:true %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :attendance_count, "Attendance Count" %>
+      <%= form.number_field :attendance_count, class: "form-control", value: @attendance.attendance_count %>
+    </div>
+
+    <%= form.submit "Update Attendance", class: "btn btn-primary" %>
+    <%= link_to "Back to Today's Classes", afns_classes_path, class: "btn btn-secondary ms-2" %>
+  <% end %>
+</div>
