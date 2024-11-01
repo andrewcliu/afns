@@ -1,5 +1,7 @@
 class AfnsClassesController < ApplicationController
   before_action :set_afns_class, only: [:show, :edit, :update, :destroy]
+  before_action :require_login, except: :new
+  before_action :require_admin, only: [:destroy]
   def index
 
     today = Date.today.strftime("%A").downcase
@@ -13,7 +15,7 @@ class AfnsClassesController < ApplicationController
     @afns_class = AfnsClass.new(afns_class_params)
 
     if @afns_class.save
-      redirect_to admin_path, notice: 'guest agreement was successfully created.'
+      redirect_to afns_classes_path, notice: 'guest agreement was successfully created.'
     else
       render :new
     end
@@ -21,7 +23,28 @@ class AfnsClassesController < ApplicationController
   def show
     @afns_class = AfnsClass.find(params[:id])
     @schedules = @afns_class.schedules
+    @scheds = @afns_class.afns_class_schedules.includes(:afns_class_attendances)
+
+    # Combine attendance data by date across all schedules
+    attendance_by_date = {}
+
+    @scheds.each do |schedule|
+      schedule.afns_class_attendances.each do |attendance|
+        # Convert date to milliseconds for chart
+        date_in_ms = attendance.attendance_date.to_time.to_i * 1000
+
+        # Add attendance count to the same date if it already exists
+        attendance_by_date[date_in_ms] = attendance_by_date.fetch(date_in_ms, 0) + attendance.attendance_count
+      end
+    end
+
+    # Sort attendance data by date (milliseconds) and prepare it for Chart.js
+    @attendance_data = [{
+      name: "Combined Attendance",
+      data: attendance_by_date.sort.map { |date, count| [date, count] } # Sorted by date
+    }]
   end
+
   def new
     @afns_class = AfnsClass.new
     @afns_class.schedules.build
@@ -44,8 +67,11 @@ class AfnsClassesController < ApplicationController
 
   def destroy 
     thisclass = AfnsClass.find(params[:id])
-    thisclass.destroy
-    redirect_to admin_path, notice: 'Class was successfully deleted.'
+    if thisclass.destroy
+      redirect_to afns_classes_path, notice: 'Class was successfully deleted.'
+    else
+      render :index 
+    end
   end
 
 

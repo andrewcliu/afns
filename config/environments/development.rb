@@ -40,9 +40,19 @@ Rails.application.configure do
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
-
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.sendgrid.net',
+    port: 587,
+    domain: 'alamedafns.com', # e.g., 'example.com'
+    authentication: :plain,
+    user_name: 'apkey', # SendGrid requires 'apikey' as the user name
+    password: Rails.application.credentials[:sendgrid_api_key],
+    enable_starttls_auto: true
+  }
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large

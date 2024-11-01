@@ -1,34 +1,78 @@
-<%= form_with model: @afns_class_schedule, local: true do |f| %>
-  <!-- Select Class -->
-  <div class="mb-3">
-    <%= f.label :afns_class_id, "Selected Class", class: "form-label" %>
-    
-    <p class="form-control-plaintext"><%= @afns_class.name %></p>
+<div class="container mt-4">
+  <h2 class="mb-4 text-center ">Add/Edit Schedule</h2>
 
-    <%= f.hidden_field :afns_class_id, value: @afns_class.id %>
-  </div>
-  <!-- Repeat Days Checkboxes -->
-  <div class="mb-3">
-    <%= f.label :repeat_days, "Repeat on Other Days", class: "form-label" %><br>
-    <% AfnsClassSchedule::DAYS_OF_WEEK.keys.each do |day| %>
-      <% next if day == @afns_class_schedule.day_of_week %> <!-- Skip current day -->
-      <div class="form-check form-check-inline">
-        <%= check_box_tag 'afns_class_schedule[repeat_days][]', day, false, class: "form-check-input" %>
-        <%= label_tag "afns_class_schedule_repeat_days_#{day}", day.capitalize, class: "form-check-label" %>
+  <%= form_with model: @afns_class_schedule, local: true do |f| %>
+    <% if @afns_class_schedule.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><i class="fas fa-exclamation-circle"></i> Please address the following errors:</h4>
+        <ul>
+          <% @afns_class_schedule.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
       </div>
     <% end %>
-  </div>
 
-  <!-- Start Time and End Time -->
-<div class="col-md-6">
-  <%= f.label :start_time, "Start Time", class: "form-label" %>
-  <%= f.time_select :start_time, { minute_step: 15, ampm: true }, class: "form-control" %>
+    <!-- Select Class -->
+    <div class="mb-3">
+      <%= f.label :afns_class_id, "Selected Class", class: "form-label fw-bold" %>
+      <p class="form-control-plaintext"><%= @afns_class.name %></p>
+      <%= f.hidden_field :afns_class_id, value: @afns_class.id %>
+    </div>
+
+    <!-- Repeat Days Checkboxes -->
+    <div class="mb-3">
+      <%= f.label :repeat_days, "Repeat on Other Days", class: "form-label fw-bold" %><br>
+
+      <% existing_days = @afns_class.schedules.pluck(:day_of_week) %>
+      <% AfnsClassSchedule::DAYS_OF_WEEK.keys.each do |day| %>
+        <% next if existing_days.include?(day) %>
+        <div class="form-check form-check-inline">
+          <%= check_box_tag 'afns_class_schedule[repeat_days][]', day, false, class: "form-check-input" %>
+          <%= label_tag "afns_class_schedule_repeat_days_#{day}", day.capitalize, class: "form-check-label" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Start Time and End Time -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <%= f.label :start_time, "Start Time", class: "form-label fw-bold" %>
+        <%= f.time_select :start_time, { minute_step: 15 }, class: "form-control shadow-sm" %>
+      </div>
+      <div class="col-md-6 mb-3">
+        <%= f.label :end_time, "End Time", class: "form-label fw-bold" %>
+        <%= f.time_select :end_time, { minute_step: 15 }, class: "form-control shadow-sm" %>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-4">
+      <%= f.submit "Create Schedule", class: "btn btn-primary px-4" %>
+      <%= link_to 'Cancel', afns_class_path(@afns_class), class: "btn btn-outline-secondary px-4 ms-2" %>
+    </div>
+  <% end %>
 </div>
-<div class="col-md-6">
-  <%= f.label :end_time, "End Time", class: "form-label" %>
-  <%= f.time_select :end_time, { minute_step: 15, ampm: true }, class: "form-control" %>
-</div>
+
+<!-- Additional Styling -->
+<style>
+  .container h2 {
+    color: #333;
+    font-weight: bold;
+  }
+
+  .form-label {
+    color: #555;
+  }
+
+  .form-control, .form-select {
+    border-radius: 8px;
+  }
 
 
-  <%= f.submit "Create Schedule", class: "btn btn-primary" %>
-<% end %>
+
+  .alert-danger {
+    border-radius: 8px;
+    font-size: 0.95em;
+  }
+</style>

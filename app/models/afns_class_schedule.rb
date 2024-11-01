@@ -2,7 +2,7 @@
 class AfnsClassSchedule < ApplicationRecord
   belongs_to :afns_class
   has_many :afns_class_attendances, dependent: :destroy
-  after_create :populate_attendance_records
+  # after_create :populate_attendance_records
 
   # Maps days of the week to integer values
   DAYS_OF_WEEK = {
@@ -15,14 +15,17 @@ class AfnsClassSchedule < ApplicationRecord
     "saturday" => 6
   }.freeze
 
-  validates :day_of_week, uniqueness: { scope: :afns_class_id, message: "already has a schedule for this day" }
-  validate :no_time_overlap
+  validates :day_of_week, uniqueness: { scope: :afns_class_id, message: "already has a schedule for this day" }, unless: :skip_uniqueness_validation?
+
 
   # Additional validations for start_time and end_time (optional)
   validates :start_time, presence: true
   validates :end_time, presence: true
 
   private
+  def skip_uniqueness_validation?
+    !self.new_record? && !self.day_of_week_changed?
+  end
   def populate_attendance_records
     # Automatically create attendance records based on the schedule's day_of_week
     attendance_date = next_occurrence_of(self.day_of_week)

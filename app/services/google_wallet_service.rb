@@ -9,16 +9,16 @@ class GoogleWalletService
   GOOGLE_WALLET_SCOPE = 'https://www.googleapis.com/auth/wallet_object.issuer'.freeze
   GOOGLE_WALLET_API_BASE = 'https://walletobjects.googleapis.com/walletobjects/v1'.freeze
 
-  def initialize(member)
+  def initialize(member, initialize_wallet = true)
     @member = member
     @key_file_path = ENV.fetch('GOOGLE_APPLICATION_CREDENTIALS', Rails.root.join('config/google_api.json'))
-    setup_credentials
-  end
 
+    setup_credentials if initialize_wallet
+  end
   def setup_credentials
     file = File.read(@key_file_path)
     key_data = JSON.parse(file)
-    @client_email = 'afns-sys@afns-440216.iam.gserviceaccount.com'
+    @client_email = Rails.application.credentials[:google_wallet_email]
     @private_key = OpenSSL::PKey::RSA.new(key_data['private_key'])
   end
 
@@ -66,14 +66,37 @@ class GoogleWalletService
           value: 'Alameda Fitness & Spa Member'
         }
       },
+      subheader:{
+        defaultValue:{
+          language: 'en-US',
+          value: 'Member'
+        }
+      },
       header:{
         defaultValue: {
           language: 'en-US',
           value: @member.name
         }
       },
+      heroImage:{
+        sourceUri:{
+          uri: "https://alamedafns.com/wp-content/uploads/2022/04/LOGO-ASF-01-800x223.png"
+        }
+      },
+      hexBackgroundColor:'#EEE',
       barcode: { type: 'CODE_128', value: @member.membership_number },
-      textModulesData: [{ header: 'Member Information', body: "Name: #{@member.name}\nEmail: #{@member.email}", id: 'MEMBER_INFO' }]
+      textModulesData: [
+        { 
+          header: 'Member Information', 
+          body: "Name: #{@member.name}\nEmail: #{@member.email}\nStatus: #{@member.is_active ? 'Active' : 'Inactive'}",
+          id: 'MEMBER_INFO'
+        },
+        {
+          header: 'About Your Membership',
+          body: "Enjoy exclusive access to all facilities and classes. Visit alamedafns.com for updates and events.",
+          id: 'ABOUT_MEMBERSHIP'
+        }
+      ]
     }
 
     response = RestClient.post("#{GOOGLE_WALLET_API_BASE}/genericObject",
@@ -99,7 +122,13 @@ class GoogleWalletService
           cardTitle:{
             defaultValue: {
               language: 'en-US',
-              value: 'Alameda Fitness & Spa Member'
+              value: 'Alameda Fitness & Spa'
+            }
+          },
+          subheader:{
+            defaultValue:{
+              language: 'en-US',
+              value: "Member since #{@member.date_join.strftime('%m/%d/%Y')}"
             }
           },
           header:{
@@ -109,7 +138,24 @@ class GoogleWalletService
             }
           },
           barcode: { type: 'CODE_128', value: @member.membership_number },
-          textModulesData: [{ header: 'Member Information', body: "Name: #{@member.name}\nEmail: #{@member.email}", id: 'MEMBER_INFO' }]
+          hexBackgroundColor:'#EEE',
+          heroImage:{
+            sourceUri:{
+              uri: "https://alamedafns.com/wp-content/uploads/2022/04/LOGO-ASF-01-800x223.png"
+            }
+          },
+          textModulesData: [
+            { 
+              header: 'Member Information', 
+              body: "Name: #{@member.name}\nEmail: #{@member.email}\nStatus: #{@member.is_active ? 'Active' : 'Inactive'}",
+              id: 'MEMBER_INFO'
+            },
+            {
+              header: 'About Your Membership',
+              body: "Enjoy exclusive access to all facilities and classes. Visit alamedafns.com for updates and events.",
+              id: 'ABOUT_MEMBERSHIP'
+            }
+          ]
         }]
       }
     }

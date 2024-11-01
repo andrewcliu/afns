@@ -9,7 +9,16 @@ module ApplicationHelper
     base64_output = Base64.encode64(barcode.to_png(xdim: 2, height: 50, margin: 10))
     "data:image/png;base64,#{base64_output}"
   end
-
+  def alert_class(type)
+    case type.to_sym
+    when :notice
+      'alert-success'
+    when :alert, :error
+      'alert-danger'
+    else
+      'alert-info'
+    end
+  end
 	def numeric?(lookAhead)
 	  lookAhead.match?(/[[:digit:]]/)
 	end

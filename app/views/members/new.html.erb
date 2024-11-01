@@ -1,4 +1,14 @@
 <%= form_with model: @member, local: true do |f| %>
+  <% if @member.errors.any? %>
+    <div class="alert alert-danger">
+      <h4>There were errors with your submission:</h4>
+      <ul>
+        <% @member.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
   <div class="mb-3">
     <%= f.label :name, "Name" %>
     <%= f.text_field :name, class: "form-control" %>

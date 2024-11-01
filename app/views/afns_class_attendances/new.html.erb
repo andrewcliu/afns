@@ -1,22 +1,21 @@
-<!-- app/views/afns_class_attendances/new.html.erb -->
+<!-- app/views/afns_class_attendances/edit.html.erb -->
 
 <div class="container my-5">
-  <h1 class="mb-4">Record Attendance for <%= @afns_class_schedule.day_of_week %> Class</h1>
+  <h1 class="mb-4 ">Add Attendance for <%= @afns_class_schedule.afns_class.name %></h1>
 
-  <%= form_with model: [@afns_class_schedule, @attendance], local: true, class: "needs-validation" do |form| %>
+  <%= form_with model: [@afns_class_schedule, @attendance], local: true do |form| %>
     <div class="mb-3">
-      <%= form.label :attendance_date, "Date", class: "form-label" %>
-      <%= form.date_field :attendance_date, value: Date.today, class: "form-control" %>
+      <%= form.label :attendance_date, "Date" %>
+      <%= form.date_field :attendance_date, class: "form-control", value: Date.today, disabled:true %>
     </div>
 
     <div class="mb-3">
-      <%= form.label :attendance_count, "Attendance Count", class: "form-label" %>
-      <%= form.number_field :attendance_count, class: "form-control", min: 0 %>
+      <%= form.label :attendance_count, "Attendance Count" %>
+      <%= form.number_field :attendance_count, class: "form-control", value: @attendance.attendance_count %>
     </div>
 
-    <div class="d-flex justify-content-start mt-4">
-      <%= form.submit "Record Attendance", class: "btn btn-primary me-2" %>
-      <%= link_to "Back to Today's Classes", afns_class_schedules_path, class: "btn btn-secondary" %>
-    </div>
+
+    <%= link_to "Back", afns_classes_path, class: "btn btn-secondary ms-2" %>
+    <%= form.submit "Update Attendance", class: "btn btn-primary" %>
   <% end %>
 </div>

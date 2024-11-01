@@ -1,29 +1,40 @@
-
 <%= form_with model: @trainer_form, local: true do |f| %>
+  <% if @trainer_form.errors.any? %>
+    <div class="alert alert-danger">
+      <h4>There were errors with your submission:</h4>
+      <ul>
+        <% @trainer_form.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
   <div class="mb-3">
-    <%= f.label :name, "Your Name" %>
-    <%= f.text_field :name, class: "form-control" %>
+    <%= f.label :name, "Your Name *" %>
+    <%= f.text_field :name, class: "form-control", required: true %>
   </div>
 
   <div class="mb-3">
-    <%= f.label :membership_number, "Membership Number or Keytag Number" %>
-    <%= f.text_field :membership_number, class: "form-control" %>
+    <%= f.label :membership_number, "Membership Number or Keytag Number *" %>
+    <%= f.text_field :membership_number, class: "form-control", required: true %>
   </div>
 
   <div class="mb-3">
-    <%= f.label :date_of_birth, "Date of Birth" %>
-    <%= f.date_select :date_of_birth, class: "form-control" %>
+    <%= f.label :date_of_birth, "Date of Birth *" %>
+    <%= f.date_select :date_of_birth, start_year: 1940, end_year: Date.today.year, class: "form-control", required: true %>
   </div>
 
   <div class="mb-3">
-    <%= f.label :phone, "Contact Phone" %>
-    <%= f.telephone_field :phone, class: "form-control" %>
+    <%= f.label :phone, "Contact Phone *" %>
+    <%= f.telephone_field :phone, class: "form-control", required: true %>
   </div>
+
   <p class='muted'>
     I am interested in working with a personal trainer for the following reasons: (select all that apply)
   </p>
+
   <div class="mb-3">
-    <%= f.label :reasons, "Reason for Training" %>
+    <%= f.label :reasons, "Reason for Training *" %>
     <%= select_tag "trainer_form[reasons][]", 
       options_for_select([
         'Lose weight', 
@@ -41,7 +52,7 @@
         'Get motivated', 
         'Other'
       ], @trainer_form.reasons&.split(';')),
-      multiple: true, class: "form-select", id: "reasons-select" %>
+      multiple: true, class: "form-select", id: "reasons-select", required: true %>
   </div>
 
   <!-- Other reason input field (hidden by default) -->
@@ -51,24 +62,21 @@
   </div>
 
   <div class="mb-3">
- 
     <%= f.label :medical_conditions, "Do you have any medical conditions your trainer should be aware of?" %>
     <%= f.text_area :medical_conditions, rows: 3, class: "form-control" %>
   </div>
 
   <div class="mb-3">
-
     <%= f.label :additional_notes, "Additional notes or requests for your trainer:" %>
     <%= f.text_area :additional_notes, rows: 3, class: "form-control" %>
   </div>
 
-        <!-- Form Actions -->
-        <div class="mt-4 text-center">
-          <%= link_to 'Cancel', root_path, class: 'btn btn-outline-danger btn-lg mx-2' %>
-          <%= f.submit "Submit Form", class: "btn btn-primary btn-lg mx-2" %>
-        </div>
+  <!-- Form Actions -->
+  <div class="mt-4 text-center">
+    <%= link_to 'Cancel', root_path, class: 'btn btn-outline-danger btn-lg mx-2' %>
+    <%= f.submit "Submit Form", class: "btn btn-primary btn-lg mx-2" %>
+  </div>
 <% end %>
-
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {

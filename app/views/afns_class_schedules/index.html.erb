@@ -1,59 +1,98 @@
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
 <style>
-  /* Ensure each event has enough vertical space */
   .fc-event {
-    min-height: 50px; /* Adjust to your preference */
-    padding: 5px; /* Add padding for readability */
-    white-space: normal; /* Allow text to wrap to multiple lines */
+    min-height: 55px;
+    padding: 7px;
+    white-space: normal;
   }
 
-  /* Increase row height in day and week views */
   .fc-dayGridMonth-view .fc-dayGrid-event {
-    min-height: 60px; /* For month view */
+    min-height: 60px;
   }
-  
+
   .fc-timeGridWeek-view .fc-timeGrid-event,
   .fc-timeGridDay-view .fc-timeGrid-event {
-    min-height: 60px; /* For week and day views */
+    min-height: 60px;
+  }
+
+
+  /* Adjust container to make space for the vertical title */
+  .calendar-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .calendar-content {
+    flex: 1;
+    margin-left: 60px; /* Adjust margin as needed to fit the title */
+  }
+
+  /* Other FullCalendar styles */
+  .fc-event-title {
+    font-size: 1.2em;
+    font-weight: bold;
   }
 </style>
-<h1 class="text-center my-4">Class Schedule Calendar</h1>
+<div id='cal'>
+  <div class="container calendar-container">
+    <!-- Vertical title -->
+    <h1 class="vertical-title" style='color:white;background-color:black;padding:10px;'>Class Schedule Calendar</h1>
 
-  <div id="calendar"></div>
-
+    <div class="calendar-content mt-5">
+      <div id="calendar"  style='border-radius:5px;'></div>
+    </div>
+  </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   const calendarEl = document.getElementById('calendar');
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'timeGridWeek', // Use week view by default
+    initialView: 'timeGridDay', // Default to day view
+    timeZone: 'UTC',
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
-    events: <%= raw @events.to_json %>, // Load events from the controller
-
-    eventTimeFormat: { // Format for displaying time
+    slotMinTime: '08:30:00',
+    slotMaxTime: '20:45:00',
+    height: 'auto', // Ensures calendar adjusts to fit content without scroll
+    contentHeight: 'auto', // Sets height based on the content
+    events: <%= raw @events.to_json %>, 
+    eventTimeFormat: {
       hour: 'numeric',
       minute: '2-digit',
       meridiem: 'short'
     },
-
-    eventContent: function(info) { // Customize the content of each event
+    eventOverlap: true,
+    slotEventOverlap: false,
+    eventDisplay: 'block',
+    eventDidMount: function(info) {
+      const colors = [
+          '#28a745', '#17a2b8', '#ffc107', '#dc3545', '#343a40',
+          '#ff6f61', // Coral
+          '#ffcc00', // Bright Yellow
+          '#ff8c42', // Vivid Orange
+          '#4caf50', // Leaf Green
+          '#ff6f91', // Light Pink
+          '#00bcd4', // Sky Blue
+          '#ffd54f', // Light Golden Yellow
+          '#f44336', // Bright Red
+          '#9c27b0', // Deep Purple
+          '#ffeb3b'  // Lemon Yellow
+      ];
+      info.el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      info.el.style.borderColor = info.el.style.backgroundColor;
+    },
+    eventContent: function(info) {
       const title = document.createElement('div');
       title.classList.add('fc-event-title');
       title.innerText = info.event.title;
-
-      const time = document.createElement('div');
-      time.classList.add('fc-event-time');
-      time.innerText = `${info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${info.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 
       const description = document.createElement('div');
       description.classList.add('fc-event-description');
@@ -61,13 +100,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
       const content = document.createElement('div');
       content.appendChild(title);
-      content.appendChild(time);
       content.appendChild(description);
+
       return { domNodes: [content] };
     }
   });
 
   calendar.render();
 });
-
 </script>

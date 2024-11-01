@@ -7,7 +7,8 @@
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
-
+<!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   </head>
 
   <body>
@@ -16,38 +17,44 @@
           (params[:controller] == 'guest_agreements' && params[:action] == 'new') || 
           (params[:controller] == 'waivers' && params[:action] == 'new') || 
           (params[:controller] == 'trainer_forms' && params[:action] == 'new') %>
-<nav class="navbar navbar-expand-lg bg-light">
+<nav class="navbar navbar-expand-lg bg-dark">
   <div class="container-fluid justify-content-center">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
       <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item">
-          <%= link_to 'Main Screen', root_path, class: 'nav-link active' %>
+        <% if signed_in? %>
+       <li class="nav-item">
+          <%= link_to '<i class="fas fa-home"></i> Home'.html_safe, admin_path, class: "nav-link #{'active' if current_page?(admin_path)}" %>
         </li>
-        <li class="nav-item">
-          <%= link_to 'Class Calendar', afns_class_schedules_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Classes', afns_classes_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Guest Waivers', guest_agreements_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Class Waivers', waivers_path, class: 'nav-link' %>
-        </li>
+        <% end -%>
+  
 
         <li class="nav-item">
-          <%= link_to 'Members', members_path, class: 'nav-link' %>
+          <%= link_to 'Class Calendar', afns_class_schedules_path, class: "nav-link #{'active' if current_page?(afns_class_schedules_path)}" %>
+        </li>
+        <% if signed_in? %>
+
+        <li class="nav-item">
+          <%= link_to 'Classes & Class Count', afns_classes_path, class: "nav-link #{'active' if current_page?(afns_classes_path)}" %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Lockers', lockers_path, class: 'nav-link' %>
+          <%= link_to 'Guest Agreements', guest_agreements_path, class: "nav-link #{'active' if current_page?(guest_agreements_path)}" %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Personal Trainer Request Form', trainer_forms_path, class: 'nav-link' %>
+          <%= link_to 'Class Waivers', waivers_path, class: "nav-link #{'active' if current_page?(waivers_path)}" %>
         </li>
+        <li class="nav-item">
+          <%= link_to 'Members', members_path, class: "nav-link #{'active' if current_page?(members_path)}" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Personal Trainer Request Form', trainer_forms_path, class: "nav-link #{'active' if current_page?(trainer_forms_path)}" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Sign Out', sign_out_path, method: :delete, class: "btn btn-danger" %>
+        </li>
+        <% end %>
         <!-- Additional links can be added here if needed -->
       </ul>
     </div>
@@ -55,12 +62,18 @@
 </nav>
 
 
+
 <% end -%>
-  <% unless params[:controller]=='afns_classes' and params[:action]=='index' or params[:controller]=='afns_class_schedules' and params[:action]=='index' %>
-    <div class='container'>
+
+  <% unless params[:controller]=='afns_class_schedules' and params[:action]=='index' %>
+    <div class='text-center'>
+      <%= render 'shared/flash_messages' %>
+    </div>
+    <div class='container mt-5'>
+
   <% end -%>
       <%= yield %>
-  <% unless params[:controller]=='afns_classes' and params[:action]=='index' or params[:controller]=='afns_class_schedules' and params[:action]=='index' %>
+  <% unless params[:controller]=='afns_class_schedules' and params[:action]=='index' %>
     </div>
   <% end -%>
   </body>

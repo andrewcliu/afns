@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Clearance::Controller
 	skip_before_action :verify_authenticity_token
 	include ApplicationHelper
 	def index 
@@ -40,6 +41,9 @@ class ApplicationController < ActionController::Base
 	private 
 
 
+  def require_admin
+    redirect_to root_path, alert: "Access denied" unless current_user&.admin?
+  end
 	def private_params 
 		params.require(dis.singularize.to_sym).permit(this.model_column_names.map{|e|e.to_sym})
 	end	

@@ -1,10 +1,15 @@
-<!-- app/views/members/index.html.erb -->
-<div class="container my-4">
+
   <h1 class="text-center mb-4">Members</h1>
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover">
-      <thead class="table-light">
+  <!-- Search Input with Icon -->
+  <div class="input-group mb-4">
+    <span class="input-group-text"><i class="fas fa-search"></i></span>
+    <input type="text" id="memberSearch" class="form-control" placeholder="Search members...">
+  </div>
+
+
+    <table class="table table-hover table-striped shadow-lg" id="memberTable">
+      <thead class="table-dark">
         <tr>
           <th>Name</th>
           <th>Email</th>
@@ -20,7 +25,7 @@
             <td><%= member.name %></td>
             <td><%= member.email %></td>
             <td><%= member.membership_number %></td>
-            <td><%= member.date_join.strftime("%B %d, %Y") if member.date_join %></td>
+            <td><%= member.date_join.strftime("%m/%d/%Y") if member.date_join %></td>
             <td>
               <% if member.is_active %>
                 <span class="badge bg-success">Active</span>
@@ -29,17 +34,59 @@
               <% end %>
             </td>
             <td>
-              <%= link_to 'Show', member_path(member), class: "btn btn-info btn-sm me-2" %>
-              <%= link_to 'Edit', edit_member_path(member), class: "btn btn-warning btn-sm me-2" %>
-              <%= link_to 'Delete', member_path(member), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-sm" %>
+              <%= link_to member_path(member), class: "btn btn-info btn-sm me-2", title: 'Show' do %>
+                <i class="fas fa-eye"></i>
+              <% end %>
+              <%= link_to edit_member_path(member), class: "btn btn-warning btn-sm me-2", title: 'Edit' do %>
+                <i class="fas fa-edit"></i>
+              <% end %>
+              <%= link_to member_path(member), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-sm", title: 'Delete' do %>
+                <i class="fas fa-trash-alt"></i>
+              <% end %>
             </td>
           </tr>
         <% end %>
       </tbody>
     </table>
-  </div>
+
 
   <div class="text-center mt-4">
     <%= link_to 'Add New Member', new_member_path, class: "btn btn-primary" %>
   </div>
-</div>
+
+
+<style>
+  .table {
+    border-radius: 8px;
+  }
+  .btn {
+    margin-right: 5px;
+  }
+  h1 {
+    font-weight: 700;
+    color: #333;
+  }
+</style>
+
+<!-- JavaScript for Search Functionality -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById("memberSearch");
+    const table = document.getElementById("memberTable").getElementsByTagName("tbody")[0];
+
+    searchInput.addEventListener("keyup", function() {
+      const filter = searchInput.value.toLowerCase();
+      const rows = table.getElementsByTagName("tr");
+
+      Array.from(rows).forEach(row => {
+        const cells = row.getElementsByTagName("td");
+        const match = Array.from(cells).some(cell => 
+          cell.textContent.toLowerCase().includes(filter)
+        );
+        row.style.display = match ? "" : "none";
+      });
+    });
+  });
+</script>
+
+

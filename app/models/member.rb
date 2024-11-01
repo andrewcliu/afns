@@ -1,17 +1,15 @@
 # app/models/member.rb
 class Member < ApplicationRecord
-  after_create :generate_wallet_link
+  attr_accessor :skip_wallet_initialization
 
-  attr_accessor :add_to_wallet_link
-
+  after_create :initialize_wallet_service, unless: -> { skip_wallet_initialization }
+  validates :name, presence: true
+  validates :email, presence: true
+  validates :membership_number, presence: true
+  validates :date_join, presence: true
   private
 
-  def generate_wallet_link
-    wallet_service = GoogleWalletService.new
-    issuer_id = "3388000000022805894"
-    class_suffix = "Member"
-    object_suffix = self.id.to_s
-
-    self.add_to_wallet_link = wallet_service.create_jwt_new_objects(issuer_id, class_suffix, object_suffix)
+  def initialize_wallet_service
+    GoogleWalletService.new(self)
   end
 end

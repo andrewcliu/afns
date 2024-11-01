@@ -1,2 +1,65 @@
-<h1>AfnsClassSchedules#edit</h1>
-<p>Find me in app/views/afns_class_schedules/edit.html.erb</p>
+<div class="container my-4">
+  <h3 class="text-center mb-4 ">Edit Schedule</h3>
+
+  <%= form_with model: @one_schedule, url: afns_class_schedule_path(@one_schedule), local: true do |f| %>
+    <% if @one_schedule.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><i class="fas fa-exclamation-circle"></i> Please address the following errors:</h4>
+        <ul>
+          <% @one_schedule.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <!-- Day of the Week Selection -->
+    <div class="mb-3">
+      <%= f.label :day_of_week, "Day of the Week", class: "form-label fw-bold" %>
+      <%= f.select :day_of_week, AfnsClassSchedule::DAYS_OF_WEEK.keys.map { |day| [day.capitalize, day] }, {}, class: "form-select shadow-sm" %>
+    </div>
+
+    <!-- Start Time and End Time -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <%= f.label :start_time, "Start Time", class: "form-label fw-bold" %>
+        <%= f.time_select :start_time, { minute_step: 15 }, class: "form-control shadow-sm" %>
+      </div>
+      <div class="col-md-6 mb-3">
+        <%= f.label :end_time, "End Time", class: "form-label fw-bold" %>
+        <%= f.time_select :end_time, { minute_step: 15 }, class: "form-control shadow-sm" %>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="text-center mt-4">
+      <%= f.submit "Save Changes", class: "btn btn-primary px-4 me-2" %>
+      <%= link_to 'Cancel', afns_class_path(@one_schedule.afns_class), class: "btn btn-outline-secondary px-4" %>
+    </div>
+  <% end %>
+</div>
+
+<!-- Additional Styling -->
+<style>
+  .container h3 {
+    color: #333;
+    font-weight: bold;
+  }
+
+  .form-label {
+    color: #555;
+  }
+
+  .form-control, .form-select {
+    border-radius: 8px;
+  }
+
+  .btn {
+    border-radius: 20px;
+  }
+
+  .alert-danger {
+    border-radius: 8px;
+    font-size: 0.95em;
+  }
+</style>

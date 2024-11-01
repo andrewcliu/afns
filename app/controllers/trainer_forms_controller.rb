@@ -1,6 +1,8 @@
 # app/controllers/trainer_forms_controller.rb
 class TrainerFormsController < ApplicationController
   before_action :set_trainer_form, only: [:show, :edit, :update, :destroy]
+  before_action :require_login, except: [:new, :create]
+  before_action :require_admin, only: [:destroy, :update]
 
   # GET /trainer_forms
   def index
@@ -28,7 +30,8 @@ class TrainerFormsController < ApplicationController
     end
 
     if @trainer_form.save
-      redirect_to @trainer_form, notice: 'Trainer form was successfully created.'
+      SysMailer.trainer_request_email(@trainer_form).deliver_now()
+      redirect_to root_path, notice: 'Trainer form was successfully created.'
     else
       render :new
     end

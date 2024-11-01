@@ -10,61 +10,68 @@
   <div class="card shadow-lg">
     <div class="card-body">
       <div class='text-center'>
-      <!-- Title and Agreement Text -->
-      <h2 class="title mb-4 mt-3 text-center">Guest Agreement</h2>
-      <p class="lead text-muted">
-        I hereby, for myself, executors and administrators, waive and release any and all rights and claims for damages I may have against Alameda Fitness and Spa, Alameda, and their respective agents, or any facility used, for any and all injuries which may be suffered by me while using Alameda Fitness and Spa, Alameda.
-      </p>
-      <p class="lead text-muted">
-        Any controversy or claim arising out of or relating to this Club shall be settled by arbitration in accordance with the Commercial Arbitration Rules of the American Arbitration Association, and judgment upon the award rendered by the arbitrator(s) may be entered in any court having jurisdiction thereof.
-      </p>
-      <p class="font-weight-bold text-danger">Outside Trainers Are Not Allowed.</p>
-      <p class="font-weight-bold text-danger">All Exercise Instruction and Private Training Is To Be Given Only by A.F.N.S Fitness Staff.</p>
-      <p class="font-weight-bold text-danger">Must Be 18+ or 13+ With Parent/Guardian.</p>
-    </div>
-      <!-- Guest Agreement Form -->
+        <h2 class="mb-4 mt-3 text-center">Guest Agreement</h2>
+        <p class="lead text-muted">
+          I hereby, for myself, executors and administrators, waive and release any and all rights and claims for damages I may have against Alameda Fitness and Spa, Alameda, and their respective agents, or any facility used, for any and all injuries which may be suffered by me while using Alameda Fitness and Spa, Alameda.
+        </p>
+        <p class="lead text-muted">
+          Any controversy or claim arising out of or relating to this Club shall be settled by arbitration in accordance with the Commercial Arbitration Rules of the American Arbitration Association, and judgment upon the award rendered by the arbitrator(s) may be entered in any court having jurisdiction thereof.
+        </p>
+        <p class="font-weight-bold text-danger">Outside Trainers Are Not Allowed.</p>
+        <p class="font-weight-bold text-danger">All Exercise Instruction and Private Training Is To Be Given Only by A.F.N.S Fitness Staff.</p>
+        <p class="font-weight-bold text-danger">Must Be 18+ or 13+ With Parent/Guardian.</p>
+      </div>
+
       <%= form_with model: @guest_agreement, url: guest_agreements_path, local: true do |f| %>
+        <% if @guest_agreement.errors.any? %>
+          <div class="alert alert-danger">
+            <h4>There were errors with your submission:</h4>
+            <ul>
+              <% @guest_agreement.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
         <!-- Personal Information Fields -->
         <div class="mb-3">
-          <%= f.label :name, "Name", class: "form-label" %>
+          <%= f.label :name, "Name *", class: "form-label" %>
           <%= f.text_field :name, class: "form-control", placeholder: "Your full name" %>
         </div>
         <div class="mb-3">
-          <%= f.label :phone, "Phone", class: "form-label" %>
+          <%= f.label :phone, "Phone *", class: "form-label" %>
           <%= f.text_field :phone, class: "form-control", placeholder: "Your phone number" %>
         </div>
         <div class="mb-3">
-          <%= f.label :email, "Email", class: "form-label" %>
+          <%= f.label :email, "Email *", class: "form-label" %>
           <%= f.email_field :email, class: "form-control", placeholder: "Your email address" %>
         </div>
         <div class="mb-3">
-          <%= f.label :address, "Address", class: "form-label" %>
+          <%= f.label :address, "Address *", class: "form-label" %>
           <%= f.text_field :address, class: "form-control", placeholder: "Your street address" %>
         </div>
-        
-        <!-- Address Fields with Bootstrap Row for Alignment -->
+
         <div class="row g-2">
           <div class="col-md-4">
-            <%= f.label :city, "City", class: "form-label" %>
+            <%= f.label :city, "City *", class: "form-label" %>
             <%= f.text_field :city, class: "form-control", placeholder: "City" %>
           </div>
           <div class="col-md-4">
-            <%= f.label :state, "State", class: "form-label" %>
+            <%= f.label :state, "State *", class: "form-label" %>
             <%= f.select :state, us_states, { include_blank: 'Select a State' }, class: "form-select" %>
           </div>
           <div class="col-md-4">
-            <%= f.label :zip_code, "Zip", class: "form-label" %>
+            <%= f.label :zip_code, "Zip *", class: "form-label" %>
             <%= f.number_field :zip_code, class: "form-control", placeholder: "Zip code" %>
           </div>
         </div>
 
         <!-- Signature Pad -->
         <div class="mt-4">
-          <label class="form-label">Signature:</label>
+          <label class="form-label">Signature: *</label>
           <canvas id="signature-pad" width="800" height="200" class="border rounded w-100"></canvas>
           <%= hidden_field_tag :signature_data, '', id: "signature_data" %>
 
-          <!-- Signature Pad Buttons -->
           <div class="d-flex justify-content-center gap-2 mt-3">
             <button type="button" id="save-button" class="btn btn-success">Save Signature</button>
             <button type="button" id="clear-button" class="btn btn-secondary">Clear</button>
@@ -80,6 +87,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Optional Custom Styling -->
 <style>
@@ -104,19 +112,29 @@
     const canvas = document.getElementById("signature-pad");
     const signaturePad = new SignaturePad(canvas);
 
-    // Save button logic
     document.getElementById("save-button").addEventListener("click", function () {
       if (!signaturePad.isEmpty()) {
         const dataUrl = signaturePad.toDataURL();
         document.getElementById("signature_data").value = dataUrl;
+        
+        // Change button text to "Signature Saved"
+        this.innerText = "Signature Saved";
+        this.classList.remove("btn-success");
+        this.classList.add("btn-secondary");
       } else {
         alert("Please provide a signature first.");
       }
     });
 
-    // Clear button logic
+
     document.getElementById("clear-button").addEventListener("click", function () {
       signaturePad.clear();
+
+      // Reset the "Save Signature" button text and style
+      const saveButton = document.getElementById("save-button");
+      saveButton.innerText = "Save Signature";
+      saveButton.classList.remove("btn-secondary");
+      saveButton.classList.add("btn-success");
     });
   });
 </script>

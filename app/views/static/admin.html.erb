@@ -1,32 +1,118 @@
 <div class="container mt-5">
-  <div class="card shadow-lg">
-    <div class="card-body text-center">
-      <h2 class="card-title mb-4">Admin Dashboard</h2>
-      
-      <p class="lead">Welcome to the admin dashboard. Please select an action below:</p>
+  <div class="text-center mb-5">
+    <h2 class="text-uppercase fw-bold">Quick Links</h2>
+  </div>
+  
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+      <div class="card shadow-sm h-100 text-center border-0 rounded-lg" style='background-color:#eee;'>
+        <div class="card-body">
+          <i class="fas fa-home fa-3x text-success mb-3"></i>
+          <h5 class="card-title">Member Screen</h5>
+          <p class="card-text">Return to the member screen.</p>
+          <%= link_to 'Member Screen', root_path, class: 'stretched-link text-decoration-none text-success' %>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col">
+      <div class="card shadow-sm h-100 text-center border-0 rounded-lg">
+        <div class="card-body">
+          <i class="fas fa-users fa-3x text-primary mb-3"></i>
+          <h5 class="card-title">Membership Page</h5>
+          <p class="card-text">View and manage all members in the system.</p>
+          <%= link_to 'Go to Membership Page', members_path, class: 'stretched-link text-decoration-none text-primary' %>
+        </div>
+      </div>
+    </div>
 
-      <div class="d-grid gap-3 mt-4">
-        <%= link_to 'Membership Page', root_path, class: 'btn btn-primary btn-lg' %>
-        <%= link_to 'Show All Classes', afns_classes_path, class: 'btn btn-secondary btn-lg' %>
-        <%= link_to 'Show All Guest Waivers', guest_agreements_path, class: 'btn btn-info btn-lg' %>
-        <%= link_to 'Show All Waivers', waivers_path, class: 'btn btn-warning btn-lg' %>
+    <div class="col">
+      <div class="card shadow-sm h-100 text-center border-0 rounded-lg">
+        <div class="card-body">
+          <i class="fas fa-chalkboard-teacher fa-3x text-secondary mb-3"></i>
+          <h5 class="card-title">Classes & Class Count</h5>
+          <p class="card-text">Review all classes, add schedules, and track attendance.</p>
+          <%= link_to 'Go to Classes', afns_classes_path, class: 'stretched-link text-decoration-none text-secondary' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card shadow-sm h-100 text-center border-0 rounded-lg">
+        <div class="card-body">
+          <i class="fas fa-calendar-alt fa-3x text-info mb-3"></i>
+          <h5 class="card-title">Class Calendar</h5>
+          <p class="card-text">View the full class calendar and schedules for the month.</p>
+          <%= link_to 'Go to Calendar', afns_class_schedules_path, class: 'stretched-link text-decoration-none text-info' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card shadow-sm h-100 text-center border-0 rounded-lg">
+        <div class="card-body">
+          <i class="fas fa-file-alt fa-3x text-warning mb-3"></i>
+          <h5 class="card-title">Guest Agreements</h5>
+          <p class="card-text">Access and manage guest agreements and records.</p>
+          <%= link_to 'Manage Guest Agreements', guest_agreements_path, class: 'stretched-link text-decoration-none text-warning' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card shadow-sm h-100 text-center border-0 rounded-lg">
+        <div class="card-body">
+          <i class="fas fa-file-signature fa-3x text-danger mb-3"></i>
+          <h5 class="card-title">Class Waivers</h5>
+          <p class="card-text">Review and organize all class waiver documents.</p>
+          <%= link_to 'Manage Waivers', waivers_path, class: 'stretched-link text-decoration-none text-danger' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card shadow-sm h-100 text-center border-0 rounded-lg">
+        <div class="card-body">
+          <i class="fas fa-dumbbell fa-3x text-dark mb-3"></i>
+          <h5 class="card-title">Personal Trainer Requests</h5>
+          <p class="card-text">Check and handle requests for personal trainers.</p>
+          <%= link_to 'Trainer Requests', trainer_forms_path, class: 'stretched-link text-decoration-none text-dark' %>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Additional Styling -->
+<!-- Styling for the Dashboard -->
 <style>
-  .card {
-    border-radius: 12px;
-  }
-
   .card-title {
-    font-weight: 700;
-    color: #333;
+    font-weight: bold;
   }
 
-  .d-grid .btn {
-    width: 100%;
+  .card-text {
+    color: #6c757d;
+  }
+
+  .card i {
+    transition: transform 0.3s ease;
+  }
+
+  .card:hover i {
+    transform: scale(1.1);
+  }
+
+  .btn-outline-danger {
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+
+  .stretched-link {
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  .stretched-link:hover {
+    color: #343a40;
   }
 </style>

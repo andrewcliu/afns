@@ -1,6 +1,7 @@
 class WaiversController < ApplicationController
   before_action :set_waiver, only: [:show, :edit, :update, :destroy]
-
+  before_action :require_login, except: [:new, :create]
+  before_action :require_admin, only: [:destroy, :update]
   def index
     @waivers = Waiver.all
   end
@@ -27,7 +28,8 @@ class WaiversController < ApplicationController
     end
 
     if @waiver.save
-      redirect_to @waiver, notice: 'Waiver was successfully created.'
+
+      redirect_to root_path, notice: 'Waiver was successfully created.'
     else
       render :new
     end

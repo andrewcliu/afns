@@ -1,64 +1,65 @@
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
-
-<% if action == 'new' %>
-  <% verb = 'Create' %>
-<% elsif action == 'edit' %>
-  <% verb = 'Update' %>
-<% end -%>
+<% verb = action == 'new' ? 'Create' : 'Update' %>
 
 <div class="container mt-5">
   <div class="card shadow-lg">
     <div class="card-body">
       <h2 class="text-center mb-4"><%= verb %> Agreement</h2>
 
-      <%= simple_form_for instant_var, html: { class: 'needs-validation' } do |f| %>
+      <%= form_with model: instant_var, local: true, html: { class: 'needs-validation' } do |f| %>
         <% form_column_names.each do |fcn| %>
-        	<% next if fcn.include? 'signature' %>
+          <% next if fcn.include? 'signature' %>
+
+          <!-- Dropdown fields for associations -->
           <% if fcn.include? '_id' %>
             <div class="mb-4">
               <label class="form-label"><%= sanitize fcn.titleize %>:</label>
               <%= f.select fcn.to_sym, form_collection(fcn), {}, class: 'form-select form-select-lg' %>
             </div>
 
+          <!-- Text area for descriptions -->
           <% elsif fcn.include? 'description' %>
             <div class="mb-4">
               <label class="form-label"><%= sanitize fcn.titleize %>:</label>
               <%= f.text_area fcn.to_sym, rows: 4, class: 'form-control' %>
             </div>
 
+          <!-- Date fields with date select -->
           <% elsif fcn.include? 'date' %>
             <div class="mb-4">
               <label class="form-label"><%= sanitize fcn.titleize %>:</label>
               <%= f.date_select fcn.to_sym, { include_blank: true, default: nil }, class: 'form-control' %>
             </div>
 
-
+          <!-- Checkbox fields for boolean values -->
           <% elsif fcn.include?('has_') || fcn.include?('is_') %>
             <div class="form-check mb-3">
               <%= f.check_box fcn.to_sym, class: 'form-check-input' %>
               <label class="form-check-label"><%= sanitize fcn.titleize %></label>
             </div>
 
+          <!-- State dropdown for US states -->
           <% elsif fcn == 'state' %>
-            <!-- State dropdown with U.S. states -->
             <div class="mb-4">
               <label class="form-label">State:</label>
               <%= f.select :state, us_states, { include_blank: 'Select a State' }, class: 'form-select' %>
             </div>
 
+          <!-- Default text fields for other attributes -->
           <% else %>
             <div class="mb-4">
-              <%= f.input fcn.to_sym, label: fcn.titleize, input_html: { class: 'form-control' } %>
+              <label class="form-label"><%= fcn.titleize %>:</label>
+              <%= f.text_field fcn.to_sym, class: 'form-control' %>
             </div>
-          <% end -%>
-
+          <% end %>
         <% end %>
 
         <hr>
 
+        <!-- Form Action Buttons -->
         <div class="d-flex justify-content-between">
-				  <%= link_to 'Back', root_path, class:'btn btn-outline-danger' %>
+          <%= link_to 'Back', root_path, class: 'btn btn-outline-danger' %>
           <%= f.submit verb, class: 'btn btn-primary' %>
         </div>
       <% end %>
@@ -88,9 +89,6 @@
     max-width: 100%;
   }
   
-  button {
-    border-radius: 8px;
-  }
 
   .form-check-input {
     margin-right: 8px;
@@ -101,5 +99,3 @@
     font-weight: 500;
   }
 </style>
-
-

@@ -1,5 +1,7 @@
 class GuestAgreementsController < ApplicationController
   before_action :set_guest_agreement, only: %i[show destroy]
+  before_action :require_login, except: [:new, :create]
+  before_action :require_admin, only: [:destroy]
   def index
     
     @guest_agreements = GuestAgreement.all
@@ -20,7 +22,7 @@ class GuestAgreementsController < ApplicationController
     end
 
     if @guest_agreement.save
-      redirect_to @guest_agreement, notice: 'Guest agreement was successfully created.'
+      redirect_to root_path, notice: 'Guest agreement was successfully created.'
     else
       render :new
     end

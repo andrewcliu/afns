@@ -1,5 +1,15 @@
 <div class="container mt-5">
 <%= form_with model: @afns_class, local: true do |f| %>
+  <% if @afns_class.errors.any? %>
+    <div class="alert alert-danger">
+      <h4>There were errors with your submission:</h4>
+      <ul>
+        <% @afns_class.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
   <!-- Class Information Fields -->
   <div class="mb-3">
     <%= f.label :name, "Class Name", class: "form-label" %>
@@ -13,8 +23,8 @@
 
   <!-- Room Selection Dropdown -->
   <div class="mb-3">
-    <%= f.label :room_id, "Room", class: "form-label" %>
-    <%= f.select :room_id, AfnsClass::ROOMS.map { |room| [room[:name], room[:id]] }, { prompt: "Select a Room" }, class: "form-select" %>
+    <%= f.label :room, "Room", class: "form-label" %>
+    <%= f.select :room, AfnsClass::ROOMS.map { |room| [room[:name]] }, { prompt: "Select a Room" }, class: "form-select" %>
   </div>
 
   <div class="mb-3">
