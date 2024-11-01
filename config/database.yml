@@ -80,6 +80,10 @@ test:
 #
 production:
   <<: *default
-  database: afns_production
-  username: afns
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  database: ENV["AFNS_DATABASE_NAME"]
+  url: ENV["AFNS_DATABASE_URL"]
+  username: ENV["AFNS_DATABASE_USERNAME"]
   password: <%= ENV['AFNS_DATABASE_PASSWORD'] %>
