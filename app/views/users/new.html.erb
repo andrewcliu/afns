@@ -1,0 +1,17 @@
+<div id="clearance" class="sign-in-container">
+  <div class='clearance-box'>
+  <h2><%= t(".title") %></h2>
+
+  <%= form_with model: @user, url: users_path, local: true do |form| %>
+    <%= render partial: 'users/form', locals: { form: form } %>
+
+    <div class="submit-field mt-4">
+      <%= form.submit class: "btn btn-primary w-full" %>
+    </div>
+
+    <div class="other-links mt-4 text-center">
+      <%= link_to t(".sign_in"), sign_in_path, class: "text-sm text-blue-500 hover:underline" %>
+    </div>
+  <% end %>
+  </div>
+</div>

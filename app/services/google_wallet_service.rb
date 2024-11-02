@@ -8,15 +8,17 @@ require 'securerandom'
 class GoogleWalletService
   GOOGLE_WALLET_SCOPE = 'https://www.googleapis.com/auth/wallet_object.issuer'.freeze
   GOOGLE_WALLET_API_BASE = 'https://walletobjects.googleapis.com/walletobjects/v1'.freeze
-  
+
   def initialize(member, initialize_wallet = true)
     @member = member
-    @key_file_path = "/var/data/google_api.json" # Persistent disk location on Render
-
-    # Decode and write the Google API key JSON if it's provided as a Base64 environment variable
-    if ENV['GOOGLE_API_KEY_BASE64']
-      json_content = Base64.decode64(ENV['GOOGLE_API_KEY_BASE64'])
-      File.write(@key_file_path, json_content)
+    if Rails.env.production?
+      @key_file_path = "/var/data/google_api.json"
+      if ENV['GOOGLE_API_KEY_BASE64']
+        json_content = Base64.decode64(ENV['GOOGLE_API_KEY_BASE64'])
+        File.write(@key_file_path, json_content)
+      end
+    else 
+      @key_file_path = ENV.fetch('GOOGLE_APPLICATION_CREDENTIALS', Rails.root.join('config/google_api.json'))
     end
 
     setup_credentials if initialize_wallet

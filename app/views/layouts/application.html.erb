@@ -12,7 +12,7 @@
   </head>
 
   <body>
-
+ <% if signed_in? %>
 <% unless (params[:controller] == 'static' && params[:action] == 'index') || 
           (params[:controller] == 'guest_agreements' && params[:action] == 'new') || 
           (params[:controller] == 'waivers' && params[:action] == 'new') || 
@@ -24,18 +24,18 @@
     </button>
     <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
       <ul class="navbar-nav mb-2 mb-lg-0">
-        <% if signed_in? %>
+
+
+       
        <li class="nav-item">
           <%= link_to '<i class="fas fa-home"></i> Home'.html_safe, admin_path, class: "nav-link #{'active' if current_page?(admin_path)}" %>
         </li>
-        <% end -%>
+        
   
 
         <li class="nav-item">
           <%= link_to 'Class Calendar', afns_class_schedules_path, class: "nav-link #{'active' if current_page?(afns_class_schedules_path)}" %>
         </li>
-        <% if signed_in? %>
-
         <li class="nav-item">
           <%= link_to 'Classes & Class Count', afns_classes_path, class: "nav-link #{'active' if current_page?(afns_classes_path)}" %>
         </li>
@@ -54,14 +54,14 @@
         <li class="nav-item">
           <%= link_to 'Sign Out', sign_out_path, method: :delete, class: "btn btn-danger" %>
         </li>
-        <% end %>
+        
         <!-- Additional links can be added here if needed -->
       </ul>
     </div>
   </div>
 </nav>
 
-
+<% end %>
 
 <% end -%>
 

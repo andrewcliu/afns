@@ -35,7 +35,7 @@ class MembersController < ApplicationController
   private
   def init_google(member, bool)
     wallet_service = GoogleWalletService.new(member, bool)
-    issuer_id = "3388000000022805894"
+    issuer_id = Rails.application.credentials[:google_wallet_issuer_id]
     class_suffix = "Member"
     object_suffix = @member.id.to_s
 
