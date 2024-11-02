@@ -6,4 +6,3 @@ class AfnsClassScheduleTest < ActiveSupport::TestCase
   # end
 end
 
-
