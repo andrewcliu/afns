@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   include Clearance::Controller
 	skip_before_action :verify_authenticity_token
 	include ApplicationHelper
+	before_action :require_login
 	def index 
 		unless dis.nil?
 			instance_variable_set("@#{dis.downcase}", this.all)

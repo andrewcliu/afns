@@ -2,7 +2,6 @@
 class AfnsClassAttendancesController < ApplicationController
   before_action :set_afns_class_schedule
   before_action :set_afns_class_attendance, only: [:edit, :update]
-  before_action :require_login
   before_action :require_admin, only: [:destroy]
   # GET /afns_class_schedules/:afns_class_schedule_id/afns_class_attendances
   def index

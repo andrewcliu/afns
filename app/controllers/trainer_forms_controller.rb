@@ -1,7 +1,6 @@
 # app/controllers/trainer_forms_controller.rb
 class TrainerFormsController < ApplicationController
   before_action :set_trainer_form, only: [:show, :edit, :update, :destroy]
-  before_action :require_login, except: [:new, :create]
   before_action :require_admin, only: [:destroy, :update]
 
   # GET /trainer_forms

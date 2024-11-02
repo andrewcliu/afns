@@ -1,6 +1,5 @@
 class GuestAgreementsController < ApplicationController
   before_action :set_guest_agreement, only: %i[show destroy]
-  before_action :require_login, except: [:new, :create]
   before_action :require_admin, only: [:destroy]
   def index
     

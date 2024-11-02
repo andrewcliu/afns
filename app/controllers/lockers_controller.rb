@@ -1,7 +1,7 @@
 # app/controllers/lockers_controller.rb
 class LockersController < ApplicationController
   before_action :set_locker, only: [:show, :edit_men, :edit_women, :update, :destroy]
-  before_action :require_login
+  # before_action :require_login
   # Separate forms for creating men’s and women’s lockers
   def new_men
     @locker = Locker.new(gender: 'male')

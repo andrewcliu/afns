@@ -1,6 +1,6 @@
 class AfnsClassesController < ApplicationController
   before_action :set_afns_class, only: [:show, :edit, :update, :destroy]
-  before_action :require_login, except: :new
+  # before_action :require_login, except: :new
   before_action :require_admin, only: [:destroy]
   def index
 

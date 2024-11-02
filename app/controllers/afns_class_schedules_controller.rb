@@ -1,7 +1,6 @@
 class AfnsClassSchedulesController < ApplicationController
   before_action :set_afns_class_schedule, only: [:destroy, :show_with_attendance]
   before_action :set_schedule, only: [:edit, :update]
-  before_action :require_login, except: :index
   before_action :require_admin, only: [:destroy]
   def show_with_attendance
     @attendance = @afns_class_schedule.afns_class_attendances.new

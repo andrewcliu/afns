@@ -1,6 +1,6 @@
 class WaiversController < ApplicationController
   before_action :set_waiver, only: [:show, :edit, :update, :destroy]
-  before_action :require_login, except: [:new, :create]
+  # before_action :require_login, except: [:new, :create]
   before_action :require_admin, only: [:destroy, :update]
   def index
     @waivers = Waiver.all

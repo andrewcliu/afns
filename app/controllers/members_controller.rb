@@ -1,7 +1,6 @@
 class MembersController < ApplicationController
   
   before_action :set_member, only: [:show, :edit, :update]
-  before_action :require_login
   before_action :require_admin, only: [:destroy, :update]
   def new
     @member = Member.new
